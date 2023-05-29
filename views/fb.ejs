@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Cloud File Browser</title>
+  <style>
+    body {
+      background-color: #282828;
+      color: #ebdbb2;
+    }
+
+    header {
+      background-color: #3c3836;
+      color: #ebdbb2;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    main {
+      margin: 20px;
+    }
+
+    h2 {
+      font-size: 24px;
+      color: #fabd2f;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    li:hover {
+      opacity: 1;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease;
+    }
+
+    footer {
+      background-color: #3c3836;
+      color: #ebdbb2;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('ul').on('click', 'li', function () {
+        var fileName = $(this).text();
+        $.ajax({
+          url: '/download?file=' + encodeURIComponent(fileName).replace(/%0A/g, '').replace(/%20/g, ''),
+          method: 'GET',
+          success: function (response) {
+            console.log('File request sent:', response);
+          },
+          error: function (error) {
+            console.error('Error sending file request:', error);
+          }
+        });
+      });
+    });
+  </script>
+
+</head>
+
+<body>
+  <header>
+    <h1>Cloud File Browser</h1>
+  </header>
+
+  <main>
+    <h2>File List</h2>
+    <ul>
+      <% files.forEach((file, index)=> { %>
+        <li class="<%= index === 0 ? 'fade-in' : '' %>">
+          <%= file.name %>
+        </li>
+        <% }) %>
+    </ul>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Cloud File Browser. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
